@@ -15,7 +15,7 @@
 <ul>
 <li>First Name: ${ employee.firstName }</li>
 <li>Last Name: ${ employee.lastName }</li>
-<li>Employee ID: ${ employee.employeeID }</li>
+<li>Employee ID: ${ employee.id }</li>
 <li>Position: ${ employee.address }</li>
 </ul>
 </body>

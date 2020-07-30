@@ -11,22 +11,22 @@ import java.io.Serializable;
  * Hibernate/JPA, and Java programming</a>.
  */
 
-public class Employee implements Serializable {
+public class Contact implements Serializable {
 
 	private static final long serialVersionUID = 3773608782961342552L;
 
-	private int employeeID;
+	private int id;
 	private String firstName, lastName, address;
 
-	public Employee(int employeeID, String firstName, String lastName, String address) {
-		this.employeeID = employeeID;
+	public Contact(int id, String firstName, String lastName, String address) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 	}
 
-	public int getEmployeeID() {
-		return (employeeID);
+	public int getId() {
+		return (id);
 	}
 
 	public String getFirstName() {

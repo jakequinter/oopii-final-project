@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.jakequinter.models.Employee;
+import com.jakequinter.models.Contact;
 
-public class EmployeeData {
+public class ContactDAO {
 	
 	private String url;
 	private String tableName;
@@ -20,22 +20,22 @@ public class EmployeeData {
 	private String password;
 	
 
-	private static final String INSERT_USERS_SQL = "INSERT INTO employees2" + "  (firstName, lastName, address) VALUES "
+	private static final String INSERT_CONTACTS_SQL = "INSERT INTO employees2" + "  (firstName, lastName, address) VALUES "
 			+ " (?, ?, ?);";
-	private static final String SELECT_USER_BY_ID = "select id,firstname,lastname,address from employees2 where id =?";
+//	private static final String SELECT_USER_BY_ID = "select id,firstname,lastname,address from employees2 where id =?";
 	
 	
 
-	public EmployeeData(String dbName, String tableName, String username, String password) {
+	public ContactDAO(String dbName, String tableName, String username, String password) {
 		this.tableName = tableName;
 		this.username = username;
 		this.password = password;
 		this.url = "jdbc:derby:" + dbName;
 	}
 	
-	public List<Employee> getEmployees() {
+	public List<Contact> getContacts() {
 		
-		List<Employee> result = new ArrayList<Employee>();
+		List<Contact> result = new ArrayList<Contact>();
 		
 		try {
 			// Get connection from method (to support overriding later to use DataSource)
@@ -47,12 +47,12 @@ public class EmployeeData {
 			// Send query to database and store results.
 			String query = "SELECT * FROM " + tableName;
 			ResultSet resultSet = statement.executeQuery(query);
-			List<Employee> list = new ArrayList<Employee>();
+			List<Contact> list = new ArrayList<Contact>();
 			
 			System.out.println("before while");
 			// Step through each row in the result set and print cells
 			while (resultSet.next()) {
-				list.add(mapEmployee(resultSet));
+				list.add(mapContact(resultSet));
 			}
 			System.out.println("after while");
 			
@@ -70,7 +70,7 @@ public class EmployeeData {
 		return result;
 	}
 
-	public Employee getEmployee(String id) {
+	public Contact getContact(String id) {
 		
 //		Employee employee = null;
 //		// Step 1: Establishing a Connection
@@ -98,7 +98,7 @@ public class EmployeeData {
 //		} 
 //		return employee;
 		
-Employee result = null;
+Contact result = null;
 		
 		try {
 			// Get connection from method (to support overriding later to use DataSource)
@@ -113,7 +113,7 @@ Employee result = null;
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				result = mapEmployee(resultSet);
+				result = mapContact(resultSet);
 			}
 
 			// Close the connection. In high-traffic servlet, be sure
@@ -127,14 +127,14 @@ Employee result = null;
 		return result;
 	}
 	
-	public void insertEmployee(Employee employee) throws SQLException {
-		System.out.println(INSERT_USERS_SQL);
+	public void addContact(Contact contact) throws SQLException {
+		System.out.println(INSERT_CONTACTS_SQL);
 		// try-with-resource statement will auto close the connection.
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
-			preparedStatement.setString(1, employee.getFirstName());
-			preparedStatement.setString(2, employee.getLastName());
-			preparedStatement.setString(3, employee.getAddress());
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CONTACTS_SQL)) {
+			preparedStatement.setString(1, contact.getFirstName());
+			preparedStatement.setString(2, contact.getLastName());
+			preparedStatement.setString(3, contact.getAddress());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
@@ -143,14 +143,14 @@ Employee result = null;
 		} 
 	}
 
-	protected Employee mapEmployee(ResultSet resultSet) throws SQLException {
+	protected Contact mapContact(ResultSet resultSet) throws SQLException {
 		System.out.println(resultSet);
 		int employeeID = resultSet.getInt("id");
 		String firstName = resultSet.getString("firstname");
 		String lastName = resultSet.getString("lastname");
 		String address = resultSet.getString("address");
 		
-		return new Employee(employeeID, firstName, lastName, address);
+		return new Contact(employeeID, firstName, lastName, address);
 	}
 
 	protected Connection getConnection() throws Exception {

@@ -3,7 +3,7 @@ package com.jakequinter.db;
 import java.sql.*;
 import java.util.*;
 
-import com.jakequinter.models.Employee;
+import com.jakequinter.models.Contact;
 
 /**
  * Creates "myDatabase" DB and "employees" table.
@@ -30,8 +30,8 @@ public class EmbeddedDbCreator {
 	}
 
 	public void createDatabase() {
-		Employee[] employees = { new Employee(1, "Larry", "Ellison", "test"),
-				new Employee(2, "Charles", "Phillips", "test2") };
+		Contact[] employees = { new Contact(1, "Larry", "Ellison", "test"),
+				new Contact(2, "Charles", "Phillips", "test2") };
 		try {
 			String dbUrl = protocol + dbName + ";create=true";
 			try {
@@ -46,8 +46,8 @@ public class EmbeddedDbCreator {
 			statement.execute(tableDescription);
 			String template = String.format("INSERT INTO %s VALUES(?, ?, ?, ?)", tableName);
 			PreparedStatement inserter = connection.prepareStatement(template);
-			for (Employee e : employees) {
-				inserter.setInt(1, e.getEmployeeID());
+			for (Contact e : employees) {
+				inserter.setInt(1, e.getId());
 				inserter.setString(2, e.getFirstName());
 				inserter.setString(3, e.getLastName());
 				inserter.setString(4, e.getAddress());
