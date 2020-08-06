@@ -14,9 +14,9 @@ import com.jakequinter.models.Contact;
 
 public class ContactDAO {
 	
-	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/oopii_final_project?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private String jdbcUsername = "root";
-	private String jdbcPassword = "itI90EtBMtwtRSw*";
+	private String jdbcPassword = "rootroot";
 	
 	
 	// contacts sql

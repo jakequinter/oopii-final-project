@@ -44,7 +44,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <td><c:out value="${contact.lastName}" /></td>
                 <td><c:out value="${contact.address}" /></td>
                 <td>
-                  <a  href="edit?id=<c:out value='${contact.id}' />">
+                  <a href="edit?id=<c:out value='${contact.id}' />">
                     <span style="color: #686868;">
                       <i class="fas fa-edit"></i>
                     </span>

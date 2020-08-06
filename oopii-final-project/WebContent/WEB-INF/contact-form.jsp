@@ -106,7 +106,7 @@
 		  return true;
 	  }
 	  
-	  function validateContactUpdate() {
+	  function validateContactUpdate() {"WebContent/WEB-INF/contact-form.jsp"
 		  if (firstName.value === "") {
 			  console.log("ERROR!");
 			  setError("Please enter a first name");
