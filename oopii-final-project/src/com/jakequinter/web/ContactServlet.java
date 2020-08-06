@@ -29,12 +29,15 @@ public class ContactServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	protected ContactDAO data;
+	protected ContactDAO contactDao;
 	
-	@Override
-	public void init() throws ServletException {
-		data = new ContactDAO("oopFinalProject", "employees2", "jakequinter", "password");
+	public void init() {
+		contactDao = new ContactDAO();
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
 	}
 	
 	@Override
@@ -44,74 +47,127 @@ public class ContactServlet extends HttpServlet {
 
 		try {
 			switch (action) {
+			case "/contacts":
+				contactsList(request, response);
+				break;
+			case "/insert":
+				addContact(request, response);
+				break;
+			case "/update":
+				updateContact(request, response);
+				break;
+			case "/delete":
+				deleteContact(request, response);
+				break;
 			case "/new":
 				showNewForm(request, response);
 				break;
-			case "/insert":
-				insertUser(request, response);
-				break;
-//			case "/delete":
-//				deleteUser(request, response);
-//				break;
 			case "/edit":
 				showEditForm(request, response);
 				break;
-//			case "/update":
-//				updateUser(request, response);
-//				break;
 			default:
-				listUser(request, response);
+				home(request, response);
 				break;
 			}
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
 		}
-//		String page = "";
-//		String id = request.getParameter("id");
-//		
-//		if (id == null || id.isEmpty()) {
-//			page = "/WEB-INF/employeeList.jsp";
-//			List<Contact> employees = data.getContacts();
-//			request.getSession().setAttribute("employees", employees);
-//		} else {
-//			page = "/WEB-INF/employeeDetail.jsp";
-//			Contact employee = data.getContact(id);
-//			request.getSession().setAttribute("employee", employee);			
-//		}
-//			
-//		request.getRequestDispatcher(page).forward(request, response);
 	}
 	
-	private void insertUser(HttpServletRequest request, HttpServletResponse response) 
-			throws SQLException, IOException {
-		String firstName = request.getParameter("fistName");
-		String lastName = request.getParameter("lastName");
-		String address = request.getParameter("address");
-		Contact newContact = new Contact(3, firstName, lastName, address);
-		data.addContact(newContact);
-		response.sendRedirect("list");
-	}
-	
-	private void listUser(HttpServletRequest request, HttpServletResponse response)
+	/**
+	 * ROUTE: / (default)
+	 * shows the contact list
+	 */
+	private void home(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		List<Contact> contact = data.getContacts();
-		request.setAttribute("employee", contact);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/employeeList.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
 	
+	/**
+	 * ROUTE: /contacts
+	 * shows the contact list
+	 */
+	private void contactsList(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
+		List<Contact> contacts = contactDao.getContacts();
+		request.setAttribute("contacts", contacts);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/contact-list.jsp");
+		dispatcher.forward(request, response);
+	}
+	
+	/**
+	 * ROUTE: /new 
+	 * shows contact form with empty fields to add new contact
+	 */
+	private void addContact(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+//		int id = data.getContacts().size() + 1;
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String address = request.getParameter("address");
+		Contact newContact = new Contact(firstName, lastName, address);
+		contactDao.addContact(newContact);
+		response.sendRedirect("contacts");
+	}
+	
+	/**
+	 * ROUTE: /update 
+	 * update contact
+	 */
+	private void updateContact(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int id = Integer.parseInt(request.getParameter("id"));
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String address = request.getParameter("address");
+
+		Contact contact = new Contact(id, firstName, lastName, address);
+		try {
+			contactDao.updateContact(contact);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("catch block update contact");
+		}
+		response.sendRedirect("contacts");
+	}
+	
+	/**
+	 * ROUTE: /delete 
+	 * delete contact
+	 */
+	private void deleteContact(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int id = Integer.parseInt(request.getParameter("id"));
+		try {
+			contactDao.deleteContact(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response.sendRedirect("contacts");
+
+	}
+	
+	/**
+	 * shows new form (empty fields)
+	 */
 	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/contact-form.jsp");
 		dispatcher.forward(request, response);
 	}
 	
+	/** 
+	 * shows edit form (populated fields)
+	 */
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		String id = request.getParameter("id");
-		Contact existingUser = data.getContact(id);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/employeeDetail.jsp");
-		request.setAttribute("user", existingUser);
+		int id = Integer.parseInt(request.getParameter("id"));
+		Contact existingUser = contactDao.getContact(id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/contact-form.jsp");
+		request.setAttribute("contact", existingUser);
 		dispatcher.forward(request, response);
 
 	}
