@@ -14,12 +14,12 @@
 		<div class="card" >
 			<div class="card-body"">
 			<h2 class="text-center"><c:out value='${contact.fullName}'/>'s Phone Number</h2>
-			<form id="contactForm" action="update-phonenumber">
+			<form id="phoneNumberForm" onsubmit="return validatePhoneNumber();">
 					<input type="hidden" name="phoneNumberId" value="<c:out value='${phoneNumber.phoneNumberId}' />" />
 					<input type="hidden" name="fkPhoneNumberContactId" value="<c:out value='${phoneNumber.fkPhoneNumberContactId}' />" />
 
 				<fieldset class="form-group">
-					<label>Phone Number</label> <input type="text" id="name"
+					<label>Phone Number</label> <input type="text" id="phoneNumber"
 						value="<c:out value='${phoneNumber.phoneNumber}' />" class="form-control"
 						name="phoneNumber">
 				</fieldset>
@@ -45,6 +45,50 @@
 		<div id='errText-container' class='errText-container' style="margin-top: 10px;">
         <div id="errText"></div>
       </div>
-	</div>	
+	</div>
+	
+	<!-- javascript -->
+  <script>
+    let phoneNumberForm = document.getElementById('phoneNumberForm');
+    let phoneNumber = document.getElementById('phoneNumber');
+    const errTextContainer = document.getElementById('errText-container');
+    const errText = document.getElementById('errText');
+    
+    function validatePhoneNumber() {
+      
+      if (phoneNumber.value == "") {
+          setError("Please enter a phone number");
+          clearError();
+          
+          return false;
+        }
+      
+      if (!(/^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/).test(phoneNumber.value)) {
+    	    setError("Phone number should be numeric and in one of the following formats: (xxx)xxx-xxxx or xxx-xxx-xxxx.");
+    	    clearError();
+    	    return false;
+    	  }
+      
+      phoneNumberForm.action = "update-phonenumber"
+      return true;
+    }
+    
+    
+    function hasNumber(myString) {
+      return /\d/.test(myString);
+    }
+    
+    function setError(msg) {
+      errTextContainer.setAttribute("class", "alert alert-danger");
+      errText.innerText = msg;
+    }
+    
+    function clearError() {
+      setTimeout(function() {
+        errTextContainer.setAttribute("class", "");
+        errText.innerText = ''
+      }, 3000)
+    }
+  </script>	
 </body>
 </html>

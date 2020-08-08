@@ -302,7 +302,7 @@ public class ContactServlet extends HttpServlet {
 		Contact existingContact = contactDao.getContact(fkAddressContactId);
 		
 		Address existingAddress = addressDao.getAddress(addressId, fkAddressContactId);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-address.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-address-form.jsp");
 		request.setAttribute("address", existingAddress);
 		request.setAttribute("contact", existingContact);
 		dispatcher.forward(request, response);
