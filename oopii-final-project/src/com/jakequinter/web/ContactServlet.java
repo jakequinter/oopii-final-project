@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jakequinter.dao.AddressDAO;
 import com.jakequinter.dao.ContactDAO;
+import com.jakequinter.dao.PhoneNumberDAO;
 import com.jakequinter.models.Address;
 import com.jakequinter.models.Contact;
+import com.jakequinter.models.PhoneNumber;
 
 
 @WebServlet("/")
@@ -25,10 +27,12 @@ public class ContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ContactDAO contactDao;
 	protected AddressDAO addressDao;
+	protected PhoneNumberDAO phoneNumberDao;
 	
 	public void init() {
 		contactDao = new ContactDAO();
 		addressDao = new AddressDAO();
+		phoneNumberDao = new PhoneNumberDAO();
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -77,6 +81,22 @@ public class ContactServlet extends HttpServlet {
 				break;
 			case "/edit-address":
 				showEditAddressForm(request, response);
+				break;
+			// phonenumber routes
+			case "/insert-phonenumber":
+				addPhoneNumber(request, response);
+				break;
+			case "/update-phonenumber":
+				updatePhoneNumber(request, response);
+				break;
+			case "/delete-phonenumber":
+				deletePhoneNumber(request, response);
+				break;
+			case "/new-phonenumber":
+				showNewPhoneNumberForm(request, response);
+				break;
+			case "/edit-phonenumber":
+				showEditPhoneNumberForm(request, response);
 				break;
 			default:
 				home(request, response);
@@ -185,10 +205,12 @@ public class ContactServlet extends HttpServlet {
 		
 		Contact existingContact = contactDao.getContact(contactId);
 		List<Address> addresses = addressDao.getContactAddresses(contactId);
+		List<PhoneNumber> phoneNumbers = phoneNumberDao.getContactPhoneNumbers(contactId);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/contact-form.jsp");
 		request.setAttribute("contact", existingContact);
 		request.setAttribute("addresses", addresses);
+		request.setAttribute("phoneNumbers", phoneNumbers);
 		dispatcher.forward(request, response);
 
 	}
@@ -277,9 +299,102 @@ public class ContactServlet extends HttpServlet {
 			throws SQLException, ServletException, IOException {
 		int addressId = Integer.parseInt(request.getParameter("addressId"));
 		int fkAddressContactId = Integer.parseInt(request.getParameter("fkAddressContactId"));
+		Contact existingContact = contactDao.getContact(fkAddressContactId);
+		
 		Address existingAddress = addressDao.getAddress(addressId, fkAddressContactId);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-address.jsp");
 		request.setAttribute("address", existingAddress);
+		request.setAttribute("contact", existingContact);
+		dispatcher.forward(request, response);
+
+	}
+	
+	
+	// =============================================================================================================================================================================================
+	// phonenumber routes
+	// =============================================================================================================================================================================================
+	
+	/**
+	 * ROUTE: /insert-phonenumber
+	 * inserts new phonenumber into phonenumber table and assigns it to current contact 
+	 */
+	private void addPhoneNumber(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		String phoneNumber = request.getParameter("phoneNumber");
+		String type = request.getParameter("type");
+		
+		PhoneNumber newPhoneNumber = new PhoneNumber(contactId, phoneNumber, type);
+		phoneNumberDao.addPhoneNumber(newPhoneNumber);
+		response.sendRedirect("edit?contactId=" + contactId);
+	}
+	
+	/**
+	 * ROUTE: /update-phonenumber
+	 * updates phonenumber
+	 */
+	private void updatePhoneNumber(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int phoneNumberId = Integer.parseInt(request.getParameter("phoneNumberId"));
+		int fkPhoneNumberContactId = Integer.parseInt(request.getParameter("fkPhoneNumberContactId"));
+		String number = request.getParameter("phoneNumber");
+		String type = request.getParameter("type");
+
+
+		PhoneNumber phoneNumber = new PhoneNumber(phoneNumberId, fkPhoneNumberContactId, number, type);
+		try {
+			phoneNumberDao.updatePhoneNumber(phoneNumber);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("catch block update contact");
+		}
+		response.sendRedirect("edit?contactId=" + fkPhoneNumberContactId);
+	}
+	
+	/**
+	 * ROUTE: /delete-phonenumber 
+	 * delete a phonenumber
+	 */
+	private void deletePhoneNumber(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int phoneNumberId = Integer.parseInt(request.getParameter("phoneNumberId"));
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		try {
+			phoneNumberDao.deletePhoneNumber(phoneNumberId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response.sendRedirect("edit?contactId=" + contactId);
+
+	}
+	
+	/**
+	 * shows new phonenumber form (empty fields)
+	 */
+	private void showNewPhoneNumberForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		Contact existingContact = contactDao.getContact(contactId);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/new-phonenumber-form.jsp");
+		request.setAttribute("contact", existingContact);
+		dispatcher.forward(request, response);
+	}
+	
+	/** 
+	 * shows edit phonenumber form (populated fields)
+	 */
+	private void showEditPhoneNumberForm(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, ServletException, IOException {
+		int phoneNumberId = Integer.parseInt(request.getParameter("phoneNumberId"));
+		int fkPhoneNumberContactId = Integer.parseInt(request.getParameter("fkPhoneNumberContactId"));
+		Contact existingContact = contactDao.getContact(fkPhoneNumberContactId);
+		
+		PhoneNumber existingPhoneNumber = phoneNumberDao.getPhoneNumber(phoneNumberId, fkPhoneNumberContactId);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-phonenumber-form.jsp");
+		request.setAttribute("contact",  existingContact);
+		request.setAttribute("phoneNumber", existingPhoneNumber);
 		dispatcher.forward(request, response);
 
 	}

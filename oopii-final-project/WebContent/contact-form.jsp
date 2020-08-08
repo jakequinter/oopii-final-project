@@ -45,27 +45,45 @@
 				</fieldset>
 				
 				<c:if test="${contact != null}"> 
-				<h5>Addresses</h5>
+				<h6 style="margin-top: 20px;">Addresses</h6>
                 <c:forEach var="address" items="${addresses}">
-                
                   <div class="input-group" style="margin-bottom: 15px;">
 					  <input type="text" readonly class="form-control" value='<c:out value='${address.addressLine1}' /> <c:out value='${address.addressLine2}' />, <c:out value='${address.city}' />, <c:out value='${address.state}' />, <c:out value='${address.postalCode}' />' >
 					  <div class="input-group-append" id="button-addon4">
-					    <a class="btn btn-outline-secondary" href="edit-address?fkAddressContactId=<c:out value='${contact.contactId}' />&addressId=<c:out value='${address.addressId}' />" role="button">Edit</a>
-					    <a class="btn btn-outline-danger" href="delete-address?addressId=<c:out value='${address.addressId}' />&contactId=<c:out value='${contact.contactId}' />">
-					      Delete
-                  		</a>
+						 <a style="color: #686868; text-decoration: none; margin:11px"  href="edit-address?fkAddressContactId=<c:out value='${contact.contactId}' />&addressId=<c:out value='${address.addressId}' />" role="button">
+					      <i class="fas fa-edit"></i>
+					    </a>
+					    
+					    <a style="color: #FF5E5E;; text-decoration: none; margin: 11px;"  href="delete-address?addressId=<c:out value='${address.addressId}' />&contactId=<c:out value='${contact.contactId}' />">
+					      <i class="fas fa-trash-alt"></i>
+                  		</a> 
 					  </div>
                 	</div>
 				</c:forEach> 
-				<a href="new-address?contactId=<c:out value='${contact.contactId}' />">
-                   	add new address
-				</a>
+				<a class="btn btn-outline-primary btn-sm" href="<%=request.getContextPath()%>/new-address?contactId=<c:out value='${contact.contactId}' />" >Add Address</a>
+
+				
+				<h6 style="margin-top: 20px;">Phone Numbers</h6>
+                <c:forEach var="phoneNumber" items="${phoneNumbers}">
+                  <div class="input-group" style="margin-bottom: 15px;">
+					  <input type="text" readonly class="form-control" value='<c:out value='${phoneNumber.phoneNumber}' />' >
+					  <div class="input-group-append" id="button-addon4">
+					    <a style="color: #686868; text-decoration: none; margin:11px"  href="edit-phonenumber?fkPhoneNumberContactId=<c:out value='${contact.contactId}' />&phoneNumberId=<c:out value='${phoneNumber.phoneNumberId}' />" role="button">
+					      <i class="fas fa-edit"></i>
+					    </a>
+					    
+					    <a style="color: #FF5E5E;; text-decoration: none; margin: 11px;"  href="delete-phonenumber?phoneNumberId=<c:out value='${phoneNumber.phoneNumberId}' />&contactId=<c:out value='${contact.contactId}' />">
+					      <i class="fas fa-trash-alt"></i>
+                  		</a> 
+					  </div>
+                	</div>
+				</c:forEach>
+				<a class="btn btn-outline-primary btn-sm" " href="<%=request.getContextPath()%>/new-phonenumber?contactId=<c:out value='${contact.contactId}' />" >Add Number</a>
 				
 				</c:if> 
 				
 				
-				<button type="submit" style="display: block; margin-top: 5; width: 100%;" class="btn btn-success">Save</button>
+				<button type="submit" style="display: block; margin-top: 20px; width: 100%;" class="btn btn-success">Save</button>
 				</form>
 			</div>
 		</div>

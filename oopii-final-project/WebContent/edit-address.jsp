@@ -13,6 +13,7 @@
 <div class="container col-md-5" style="margin-top: 50px;">
 		<div class="card" >
 			<div class="card-body"">
+			<h2 class="text-center"><c:out value='${contact.fullName}'/>'s Address</h2>
 			<form id="contactForm" action="update-address">
 					<input type="hidden" name="addressId" value="<c:out value='${address.addressId}' />" />
 					<input type="hidden" name="fkAddressContactId" value="<c:out value='${address.fkAddressContactId}' />" />

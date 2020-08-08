@@ -22,9 +22,6 @@
             <li class="nav-item">
       			  <a class="nav-item nav-link" href="contacts">Contacts <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-item nav-link" href="new">New Contact<span class="sr-only">(current)</span></a>
-            </li>
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
