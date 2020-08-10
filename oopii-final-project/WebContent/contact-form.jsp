@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>User Management Application</title>
+<title>Address Book | Contact</title>
 <body>
     <%@ include file="/WEB-INF/nav.jsp" %>
 <div class="container col-md-5" style="margin-top: 50px;">
@@ -44,6 +44,7 @@
 						name="lastName">
 				</fieldset>
 				
+				<!-- addresses -->
 				<c:if test="${contact != null}"> 
 				<h6 style="margin-top: 20px;">Addresses</h6>
                 <c:forEach var="address" items="${addresses}">
@@ -62,7 +63,7 @@
 				</c:forEach> 
 				<a class="btn btn-outline-primary btn-sm" href="<%=request.getContextPath()%>/new-address?contactId=<c:out value='${contact.contactId}' />" >Add Address</a>
 
-				
+				<!-- phone numbers -->
 				<h6 style="margin-top: 20px;">Phone Numbers</h6>
                 <c:forEach var="phoneNumber" items="${phoneNumbers}">
                   <div class="input-group" style="margin-bottom: 15px;">
@@ -79,6 +80,24 @@
                 	</div>
 				</c:forEach>
 				<a class="btn btn-outline-primary btn-sm" " href="<%=request.getContextPath()%>/new-phonenumber?contactId=<c:out value='${contact.contactId}' />" >Add Number</a>
+				
+				<!-- emails -->
+				<h6 style="margin-top: 20px;">Emails</h6>
+                <c:forEach var="email" items="${emails}">
+                  <div class="input-group" style="margin-bottom: 15px;">
+					  <input type="text" readonly class="form-control" value='<c:out value='${email.email}' />' >
+					  <div class="input-group-append" id="button-addon4">
+					    <a style="color: #686868; text-decoration: none; margin:11px"  href="edit-email?fkEmailContactId=<c:out value='${contact.contactId}' />&emailId=<c:out value='${email.emailId}' />" role="button">
+					      <i class="fas fa-edit"></i>
+					    </a>
+					    
+					    <a style="color: #FF5E5E;; text-decoration: none; margin: 11px;"  href="delete-email?emailId=<c:out value='${email.emailId}' />&contactId=<c:out value='${contact.contactId}' />">
+					      <i class="fas fa-trash-alt"></i>
+                  		</a> 
+					  </div>
+                	</div>
+				</c:forEach>
+				<a class="btn btn-outline-primary btn-sm" " href="<%=request.getContextPath()%>/new-email?contactId=<c:out value='${contact.contactId}' />" >Add Email</a>
 				
 				</c:if> 
 				

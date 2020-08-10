@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jakequinter.dao.AddressDAO;
 import com.jakequinter.dao.ContactDAO;
+import com.jakequinter.dao.EmailDAO;
 import com.jakequinter.dao.PhoneNumberDAO;
 import com.jakequinter.models.Address;
 import com.jakequinter.models.Contact;
+import com.jakequinter.models.Email;
 import com.jakequinter.models.PhoneNumber;
 
 
@@ -28,11 +30,13 @@ public class ContactServlet extends HttpServlet {
 	protected ContactDAO contactDao;
 	protected AddressDAO addressDao;
 	protected PhoneNumberDAO phoneNumberDao;
+	protected EmailDAO emailDao;
 	
 	public void init() {
 		contactDao = new ContactDAO();
 		addressDao = new AddressDAO();
 		phoneNumberDao = new PhoneNumberDAO();
+		emailDao = new EmailDAO();
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -97,6 +101,22 @@ public class ContactServlet extends HttpServlet {
 				break;
 			case "/edit-phonenumber":
 				showEditPhoneNumberForm(request, response);
+				break;
+			// email routes
+			case "/insert-email":
+				addEmail(request, response);
+				break;
+			case "/update-email":
+				updateEmail(request, response);
+				break;
+			case "/delete-email":
+				deleteEmail(request, response);
+				break;
+			case "/new-email":
+				showNewEmailForm(request, response);
+				break;
+			case "/edit-email":
+				showEditEmailForm(request, response);
 				break;
 			default:
 				home(request, response);
@@ -206,11 +226,13 @@ public class ContactServlet extends HttpServlet {
 		Contact existingContact = contactDao.getContact(contactId);
 		List<Address> addresses = addressDao.getContactAddresses(contactId);
 		List<PhoneNumber> phoneNumbers = phoneNumberDao.getContactPhoneNumbers(contactId);
+		List<Email> emails = emailDao.getContactEmails(contactId);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/contact-form.jsp");
 		request.setAttribute("contact", existingContact);
 		request.setAttribute("addresses", addresses);
 		request.setAttribute("phoneNumbers", phoneNumbers);
+		request.setAttribute("emails",  emails);
 		dispatcher.forward(request, response);
 
 	}
@@ -395,6 +417,95 @@ public class ContactServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-phonenumber-form.jsp");
 		request.setAttribute("contact",  existingContact);
 		request.setAttribute("phoneNumber", existingPhoneNumber);
+		dispatcher.forward(request, response);
+
+	}
+	
+	// =============================================================================================================================================================================================
+	// email routes
+	// 
+	
+	/**
+	 * ROUTE: /insert-email
+	 * inserts new email into email table and assigns it to current contact 
+	 */
+	private void addEmail(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		String email = request.getParameter("email");
+		String type = request.getParameter("type");
+		
+		Email newEmail = new Email(contactId, email, type);
+		emailDao.addEmail(newEmail);
+		response.sendRedirect("edit?contactId=" + contactId);
+	}
+	
+	/**
+	 * ROUTE: /update-email
+	 * updates email
+	 */
+	private void updateEmail(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int emailId = Integer.parseInt(request.getParameter("emailId"));
+		int fkEmailContactId = Integer.parseInt(request.getParameter("fkEmailContactId"));
+		String e_mail = request.getParameter("email");
+		String type = request.getParameter("type");
+
+
+		Email email = new Email(emailId, fkEmailContactId, e_mail, type);
+		try {
+			emailDao.updateEmail(email);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("catch block update contact");
+		}
+		response.sendRedirect("edit?contactId=" + fkEmailContactId);
+	}
+	
+	/**
+	 * ROUTE: /delete-email 
+	 * delete an email
+	 */
+	private void deleteEmail(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, IOException {
+		int emailId = Integer.parseInt(request.getParameter("emailId"));
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		try {
+			emailDao.deleteEmail(emailId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response.sendRedirect("edit?contactId=" + contactId);
+
+	}
+	
+	/**
+	 * shows new email form (empty fields)
+	 */
+	private void showNewEmailForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int contactId = Integer.parseInt(request.getParameter("contactId"));
+		Contact existingContact = contactDao.getContact(contactId);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/new-email-form.jsp");
+		request.setAttribute("contact", existingContact);
+		dispatcher.forward(request, response);
+	}
+	
+	/** 
+	 * shows edit email form (populated fields)
+	 */
+	private void showEditEmailForm(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, ServletException, IOException {
+		int emailId = Integer.parseInt(request.getParameter("emailId"));
+		int fkEmailContactId = Integer.parseInt(request.getParameter("fkEmailContactId"));
+		Contact existingContact = contactDao.getContact(fkEmailContactId);
+		
+		Email existingEmail = emailDao.getEmail(emailId, fkEmailContactId);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/edit-email-form.jsp");
+		request.setAttribute("contact",  existingContact);
+		request.setAttribute("email", existingEmail);
 		dispatcher.forward(request, response);
 
 	}

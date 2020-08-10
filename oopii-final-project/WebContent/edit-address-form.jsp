@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Address Book | Edit Address</title>
 </head>
 <body>
     <%@ include file="/WEB-INF/nav.jsp" %>

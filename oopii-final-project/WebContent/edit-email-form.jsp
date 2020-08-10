@@ -6,75 +6,65 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Address Book | Add Phone</title>
+<title>Address Book | Edit Email</title>
 </head>
 <body>
     <%@ include file="/WEB-INF/nav.jsp" %>
 <div class="container col-md-5" style="margin-top: 50px;">
 		<div class="card" >
 			<div class="card-body"">
-			<h2 class="text-center">New Phone Number</h2>
-			<form id="phoneNumberForm" onsubmit="return validatePhoneNumber();">
-
-				<input type="hidden" name="contactId" value="<c:out value='${contact.contactId}' />" />
+			<h2 class="text-center"><c:out value='${contact.fullName}'/>'s Email</h2>
+			<form id="emailForm" onsubmit="return validateEmail();">
+					<input type="hidden" name="emailId" value="<c:out value='${email.emailId}' />" />
+					<input type="hidden" name="fkEmailContactId" value="<c:out value='${email.fkEmailContactId}' />" />
 
 				<fieldset class="form-group">
-					<label>Phone Number</label> <input type="text" id="phoneNumber"
-						value="<c:out value='${phoneNumber.phoneNumber}' />" class="form-control"
-						name="phoneNumber">
+					<label>Email</label> <input type="email" id="email"
+						value="<c:out value='${email.email}' />" class="form-control"
+						name="email">
 				</fieldset>
 				
 				<fieldset class="form-group">
-					<label>Type</label> 
+					<label>Type: <c:out value='${email.type}' /></label> 
 					<%-- <input type="text" id="name"
 						value="<c:out value='${phoneNumber.type}' />" class="form-control"
 						name="type"> --%>
-						 <select class="form-control" id="exampleFormControlSelect1" name="type">
-					      <option>Mobile</option>
-					      <option>Home</option>
+	   				    <select class="form-control" name="type">
+					      <option>Primary</option>
+					      <option>Secondary</option>
 					      <option>Work</option>
 					      <option>Other</option>
 					    </select>
 				</fieldset>
 				
 				<button type="submit" style="display: block; margin-top: 5; width: 100%;" class="btn btn-success">Save</button>
+				
 				</form>
 			</div>
 		</div>
 		<div id='errText-container' class='errText-container' style="margin-top: 10px;">
         <div id="errText"></div>
       </div>
-	</div>	
+	</div>
 	
 	<!-- javascript -->
-	<script>
-    let phoneNumberForm = document.getElementById('phoneNumberForm');
-    let phoneNumber = document.getElementById('phoneNumber');
+  <script>
+    let emailForm = document.getElementById('emailForm');
+    let email = document.getElementById('email');
     const errTextContainer = document.getElementById('errText-container');
     const errText = document.getElementById('errText');
     
-    function validatePhoneNumber() {
+    function validateEmail() {
       
-      if (phoneNumber.value == "") {
-          setError("Please enter a phone number");
+      if (email.value == "") {
+          setError("Please enter an email adderss");
           clearError();
           
           return false;
         }
       
-      if (!(/^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/).test(phoneNumber.value)) {
-    	    setError("Phone number should be numeric and in one of the following formats: (xxx)xxx-xxxx or xxx-xxx-xxxx.");
-    	    clearError();
-    	    return false;
-    	  }
-      
-      phoneNumberForm.action = "insert-phonenumber"
+      emailForm.action = "update-email"
       return true;
-    }
-    
-    
-    function hasNumber(myString) {
-      return /\d/.test(myString);
     }
     
     function setError(msg) {

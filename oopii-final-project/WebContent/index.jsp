@@ -4,7 +4,7 @@
 <html>
 <head>
 <!-- <meta charset="UTF-8"> -->
-<title>Insert title here</title>
+<title>Address Book</title>
 
 </head>
 <body>
@@ -34,7 +34,7 @@
     <li>MySQL for database CRUD operations</li>
   </ul>
   <a class="btn btn-primary btn-lg" href="contacts" role="button">View Contacts</a>
-  <a class="btn btn-secondary btn-lg" href="contacts" role="button">View Source Code</a>
+  <a class="btn btn-secondary btn-lg" href="https://github.com/jakequinter/oopii-final-project" role="button">View Source Code</a>
 </div>
 </body>
 </html>

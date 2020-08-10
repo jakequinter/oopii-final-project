@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Address Book | New Address</title>
 </head>
 <body>
   <%@ include file="/WEB-INF/nav.jsp" %>
