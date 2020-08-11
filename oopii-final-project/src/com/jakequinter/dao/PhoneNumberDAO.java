@@ -18,7 +18,7 @@ public class PhoneNumberDAO {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "rootroot";
 
-	// address sql
+	// phonenumber sql
 	private static final String INSERT_PHONENUMBER_SQL = "INSERT INTO phonenumber (fk_phonenumber_contact_contactid, phonenumber, type) VALUES (?, ?, ?)";
 	private static final String SELECT_PHONENUMBER_BY_ID = "SELECT phonenumberid, fk_phonenumber_contact_contactid, phonenumber, type FROM phonenumber where phonenumberid = ? AND fk_phonenumber_contact_contactid = ?";
 	private static final String UPDATE_PHONENUMBER_SQL = "UPDATE phonenumber set fk_phonenumber_contact_contactid = ?, phonenumber = ?, type = ? where phonenumberid = ?";

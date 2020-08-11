@@ -10,39 +10,35 @@
 </head>
 <body>
     <%@ include file="/WEB-INF/nav.jsp" %>
-<div class="container col-md-5" style="margin-top: 50px;">
+	<div class="container col-md-5" style="margin-top: 50px;">
 		<div class="card" >
-			<div class="card-body"">
-			<h2 class="text-center">New Email</h2>
-			<form id="emailForm" onsubmit="return validateEmail();">
+			<div class="card-body">
+				<h2 class="text-center">New Email</h2>
+				<form id="emailForm" onsubmit="return validateEmail();">
 
-				<input type="hidden" name="contactId" value="<c:out value='${contact.contactId}' />" />
+					<input type="hidden" name="contactId" value="<c:out value='${contact.contactId}' />" />
 
-				<fieldset class="form-group">
-					<label>Email</label> <input type="email" id="email"
-						value="<c:out value='${email.email}' />" class="form-control"
-						name="email">
-				</fieldset>
-				
-				<fieldset class="form-group">
+					<fieldset class="form-group">
+						<label>Email</label> 
+						<input type="email" id="email" value="<c:out value='${email.email}' />" class="form-control" name="email">
+					</fieldset>
+					
+					<fieldset class="form-group">
 					<label>Type</label> 
-					<%-- <input type="text" id="name"
-						value="<c:out value='${phoneNumber.type}' />" class="form-control"
-						name="type"> --%>
-						 <select class="form-control" id="exampleFormControlSelect1" name="type">
-					      <option>Primary</option>
-					      <option>Secondary</option>
-					      <option>Work</option>
-					      <option>Other</option>
-					    </select>
-				</fieldset>
-				
-				<button type="submit" style="display: block; margin-top: 5; width: 100%;" class="btn btn-success">Save</button>
+						<select class="form-control" id="exampleFormControlSelect1" name="type">
+							<option>Primary</option>
+						    <option>Secondary</option>
+						    <option>Work</option>
+						    <option>Other</option>
+						</select>
+					</fieldset>
+					
+					<button type="submit" style="display: block; margin-top: 5; width: 100%;" class="btn btn-success">Save</button>
 				</form>
 			</div>
 		</div>
 		<div id='errText-container' class='errText-container' style="margin-top: 10px;">
-        <div id="errText"></div>
+        	<div id="errText"></div>
       </div>
 	</div>	
 	

@@ -18,7 +18,7 @@ public class EmailDAO {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "rootroot";
 
-	// address sql
+	// email sql
 	private static final String INSERT_EMAIL_SQL = "INSERT INTO email (fk_email_contact_contactid, email, type) VALUES (?, ?, ?)";
 	private static final String SELECT_EMAIL_BY_ID = "SELECT emailid, fk_email_contact_contactid, email, type FROM email where emailid = ? AND fk_email_contact_contactid = ?";
 	private static final String UPDATE_EMAIL_SQL = "UPDATE email set fk_email_contact_contactid = ?, email = ?, type = ? where emailid = ?";
