@@ -104,11 +104,6 @@ pageEncoding="UTF-8"%>
       return true;
     }
     
-    
-    function hasNumber(myString) {
-      return /\d/.test(myString);
-    }
-    
     function setError(msg) {
       errTextContainer.setAttribute("class", "alert alert-danger");
       errText.innerText = msg;
