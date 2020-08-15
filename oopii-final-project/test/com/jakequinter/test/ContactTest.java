@@ -53,13 +53,5 @@ class ContactTest {
 		assertEquals(contact.getLastName(), "Doe");
 		
 	}
-	
-//	@Test
-//	void deleteContactTest() throws Exception {
-//		ContactDAO contactDao = new ContactDAO();
-//		contactDao.deleteContact(1);
-//	
-//		
-//	}
 
 }
